@@ -11,7 +11,7 @@ import { canUserAddTransaction } from "../_data/can-user-add-transaction";
 const TransactionsPage = async () => {
   const { userId } = await auth();
 
-  if (!userId) return redirect("/login");
+  if (!userId) return redirect("/sign-in");
 
   const transactions = await db.transaction.findMany({
     where: {
