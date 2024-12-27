@@ -52,6 +52,12 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
       },
+      screens: {
+        "max-sm": { max: "639px" },
+        "max-md": { max: "767px" },
+        "max-lg": { max: "1023px" },
+        "max-xl": { max: "1279px" },
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
