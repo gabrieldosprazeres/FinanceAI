@@ -63,19 +63,23 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
               <Markdown>{report}</Markdown>
             </ScrollArea>
 
-            <DialogFooter>
+            <DialogFooter className="flex justify-center">
               <DialogClose asChild>
-                <Button variant={"ghost"}>Cancelar</Button>
+                <Button variant="outline" className="flex-1 hover:bg-primary">
+                  Cancelar
+                </Button>
               </DialogClose>
 
               <Button
                 onClick={handleGenerateReportClick}
                 disabled={reportIsLoading}
+                className="flex-1"
               >
-                {reportIsLoading && (
+                {reportIsLoading ? (
                   <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  "Gerar relatório"
                 )}
-                Gerar relatório
               </Button>
             </DialogFooter>
           </>
