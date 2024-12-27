@@ -207,7 +207,7 @@ const SignInForm = () => {
               </Button>
 
               <div className="flex items-center justify-center gap-2">
-                <span className="bg-background text-muted-foreground">
+                <span className="text-muted-foreground">
                   Não tem uma conta?
                 </span>
                 <Link
@@ -222,7 +222,7 @@ const SignInForm = () => {
 
           <div className="flex items-center justify-center gap-2">
             <Separator className="flex-1 bg-primary" />
-            <span className="bg-background font-bold uppercase text-muted-foreground">
+            <span className="font-bold uppercase text-muted-foreground">
               ou entre com
             </span>
             <Separator className="flex-1 bg-primary" />
