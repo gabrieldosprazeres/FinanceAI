@@ -42,13 +42,16 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"ghost"}>
+        <Button
+          variant="outline"
+          className="bg-primary-foreground hover:bg-primary"
+        >
           Relatório IA
           <BotIcon />
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-[600px]">
+      <DialogContent className="max-sm:max-w-[375px]">
         {hasPremiumPlan ? (
           <>
             <DialogHeader>
@@ -63,7 +66,7 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
               <Markdown>{report}</Markdown>
             </ScrollArea>
 
-            <DialogFooter className="flex justify-center">
+            <DialogFooter className="flex flex-row justify-center space-x-4">
               <DialogClose asChild>
                 <Button variant="outline" className="flex-1 hover:bg-primary">
                   Cancelar

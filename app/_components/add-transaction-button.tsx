@@ -13,15 +13,17 @@ import {
 
 interface AddTransactionButtonProps {
   userCanAddTransaction?: boolean;
+  className?: string;
 }
 
 const AddTransactionButton = ({
   userCanAddTransaction,
+  className,
 }: AddTransactionButtonProps) => {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
-    <>
+    <div className={className}>
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -49,7 +51,7 @@ const AddTransactionButton = ({
         isOpen={dialogIsOpen}
         setIsOpen={setDialogIsOpen}
       />
-    </>
+    </div>
   );
 };
 

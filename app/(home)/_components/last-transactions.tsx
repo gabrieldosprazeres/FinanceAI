@@ -9,9 +9,13 @@ import Link from "next/link";
 
 interface LastTransactionsProps {
   lastTransactions: Transaction[];
+  className?: string;
 }
 
-const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
+const LastTransactions = ({
+  lastTransactions,
+  className,
+}: LastTransactionsProps) => {
   const getAmountColor = (transaction: Transaction) => {
     if (transaction.type === "DEPOSIT") {
       return "text-primary";
@@ -39,7 +43,7 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
   };
 
   return (
-    <ScrollArea className="rounded-md border">
+    <ScrollArea className={`rounded-md border ${className}`}>
       <CardHeader className="flex-row items-center justify-between">
         <CardTitle className="font-bold">Últimas transações</CardTitle>
         <Button variant={"outline"} className="rounded-full font-bold" asChild>
@@ -47,7 +51,9 @@ const LastTransactions = ({ lastTransactions }: LastTransactionsProps) => {
         </Button>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent
+        className={`space-y-6 ${className === "inline min-sm:hidden" && "h-[500px] overflow-y-auto"}`}
+      >
         {lastTransactions.map((transaction) => (
           <div
             key={transaction.id}

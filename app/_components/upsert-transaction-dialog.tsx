@@ -7,7 +7,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "./ui/dialog";
 import {
   Form,
@@ -114,14 +113,14 @@ const UpsertTransactionDialog = ({
         if (!open) form.reset();
       }}
     >
-      <DialogTrigger asChild></DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-sm:max-w-[375px]">
         <DialogHeader>
-          <DialogTitle>
-            {" "}
+          <DialogTitle className="text-center text-lg">
             {isUpdate ? "Atualizar" : "Criar"} transação
           </DialogTitle>
-          <DialogDescription>Insira as informações abaixo</DialogDescription>
+          <DialogDescription className="text-center">
+            Insira as informações abaixo
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -258,14 +257,14 @@ const UpsertTransactionDialog = ({
               )}
             />
 
-            <DialogFooter>
+            <DialogFooter className="flex w-full flex-row justify-between gap-4">
               <DialogClose asChild>
-                <Button type="button" variant="outline">
+                <Button type="button" variant="outline" className="flex-1">
                   Cancelar
                 </Button>
               </DialogClose>
 
-              <Button type="submit">
+              <Button type="submit" className="flex-1">
                 {isUpdate ? "Atualizar" : "Adicionar"}
               </Button>
             </DialogFooter>

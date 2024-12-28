@@ -18,13 +18,22 @@ const SummaryCard = ({
 }: SummaryCardProps) => {
   return (
     <Card className={`${size === "large" ? "bg-white bg-opacity-5" : ""}`}>
-      <CardHeader className="flex flex-row items-center gap-4">
-        {icon}
-        <p
-          className={`${size === "small" ? "text-muted-foreground" : "text-white opacity-70"}`}
-        >
-          {title}
-        </p>
+      <CardHeader className="flex flex-row items-center justify-between gap-4">
+        <div className="flex flex-row items-center gap-2">
+          {icon}
+          <p
+            className={`${size === "small" ? "text-muted-foreground" : "text-white opacity-70"}`}
+          >
+            {title}
+          </p>
+        </div>
+
+        {size === "large" && (
+          <AddTransactionButton
+            userCanAddTransaction={userCanAddTransaction}
+            className="hidden max-sm:inline"
+          />
+        )}
       </CardHeader>
       <CardContent className="flex items-center justify-between">
         <p
@@ -37,7 +46,10 @@ const SummaryCard = ({
         </p>
 
         {size === "large" && (
-          <AddTransactionButton userCanAddTransaction={userCanAddTransaction} />
+          <AddTransactionButton
+            userCanAddTransaction={userCanAddTransaction}
+            className="inline max-sm:hidden"
+          />
         )}
       </CardContent>
     </Card>

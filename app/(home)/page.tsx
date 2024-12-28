@@ -35,10 +35,10 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
   return (
     <>
       <Navbar />
-      <div className="flex h-full flex-col space-y-6 overflow-hidden p-6">
-        <div className="flex justify-between">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <div className="flex items-center gap-3">
+      <div className="flex h-full flex-col space-y-4 overflow-hidden p-4 sm:space-y-6 sm:p-6">
+        <div className="flex flex-col space-y-3 sm:flex-row sm:justify-between sm:space-y-0">
+          <h1 className="text-xl font-bold sm:text-2xl">Dashboard</h1>
+          <div className="flex flex-row items-end justify-between space-y-2 sm:flex-row sm:items-center sm:gap-3 sm:space-y-0">
             <AiReportButton
               month={month}
               hasPremiumPlan={
@@ -49,13 +49,13 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
           </div>
         </div>
 
-        <div className="grid h-full grid-cols-[2fr,1fr] gap-6 overflow-hidden">
-          <div className="flex flex-col gap-6 overflow-hidden">
+        <div className="flex flex-col gap-4 overflow-y-auto sm:h-full sm:gap-6 lg:grid lg:grid-cols-[2fr,1fr] min-sm:max-h-[calc(100vh-150px)]">
+          <div className="flex flex-col gap-4 sm:gap-6">
             <SummaryCards
               {...dashboard}
               userCanAddTransaction={userCanAddTransaction}
             />
-            <div className="grid h-full grid-cols-3 grid-rows-1 gap-6 overflow-hidden">
+            <div className="flex flex-col gap-4 sm:h-full sm:gap-6 md:grid md:grid-cols-3 lg:grid-cols-3">
               <TransactionsPieChart
                 {...JSON.parse(JSON.stringify(dashboard))}
               />
@@ -63,8 +63,15 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
                 expensesPerCategory={dashboard.totalExpensePerCategory}
               />
             </div>
+            <LastTransactions
+              lastTransactions={dashboard.lastTransactions}
+              className="inline min-sm:hidden"
+            />
           </div>
-          <LastTransactions lastTransactions={dashboard.lastTransactions} />
+          <LastTransactions
+            lastTransactions={dashboard.lastTransactions}
+            className="inline max-sm:hidden"
+          />
         </div>
       </div>
     </>
