@@ -59,7 +59,7 @@ const TransactionsPieChart = ({
   ];
 
   return (
-    <Card className="flex flex-col p-6">
+    <Card className="p-6">
       {/* TODO: Add the title and description of the card according to the month selected */}
       {/* <CardHeader className="items-center pb-0">
         <CardTitle>Pie Chart - Donut</CardTitle>

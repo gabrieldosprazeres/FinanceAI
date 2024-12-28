@@ -14,6 +14,9 @@ export const transcationColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "name",
     header: "Nome",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="max-w-xs truncate">{transaction.name}</div>
+    ),
   },
   {
     accessorKey: "type",
@@ -25,33 +28,45 @@ export const transcationColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "category",
     header: "Categoria",
-    cell: ({ row: { original: transaction } }) =>
-      TRANSACTION_CATEGORY_LABELS[transaction.category],
+    cell: ({ row: { original: transaction } }) => (
+      <div className="max-w-xs truncate">
+        {TRANSACTION_CATEGORY_LABELS[transaction.category]}
+      </div>
+    ),
   },
   {
     accessorKey: "paymentMethod",
     header: "Método de Pagamento",
-    cell: ({ row: { original: transaction } }) =>
-      TRANSACTION_PAYMENT_METHOD_LABELS[transaction.paymentMethod],
+    cell: ({ row: { original: transaction } }) => (
+      <div className="max-w-xs truncate">
+        {TRANSACTION_PAYMENT_METHOD_LABELS[transaction.paymentMethod]}
+      </div>
+    ),
   },
   {
     accessorKey: "date",
     header: "Data",
-    cell: ({ row: { original: transaction } }) =>
-      new Date(transaction.date).toLocaleDateString("pt-BR", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }),
+    cell: ({ row: { original: transaction } }) => (
+      <div className="whitespace-nowrap">
+        {new Date(transaction.date).toLocaleDateString("pt-BR", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+        })}
+      </div>
+    ),
   },
   {
     accessorKey: "amount",
     header: "Valor",
-    cell: ({ row: { original: transaction } }) =>
-      new Intl.NumberFormat("pt-BR", {
-        style: "currency",
-        currency: "BRL",
-      }).format(Number(transaction.amount)),
+    cell: ({ row: { original: transaction } }) => (
+      <div className="whitespace-nowrap">
+        {new Intl.NumberFormat("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        }).format(Number(transaction.amount))}
+      </div>
+    ),
   },
   {
     accessorKey: "actions",
