@@ -57,6 +57,7 @@ const config: Config = {
         "max-md": { max: "767px" },
         "max-lg": { max: "1023px" },
         "max-xl": { max: "1279px" },
+        "min-sm": { min: "640px" },
       },
       borderRadius: {
         lg: "var(--radius)",

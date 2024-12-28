@@ -1,0 +1,29 @@
+<svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 16 16"
+    width="28"
+    height="28"
+    fill="white"
+>
+    <rect
+        y="7"
+        width="9"
+        height="2"
+        rx="1"
+        transform="translate(7, -5) rotate(0)"
+    />
+    <rect
+        y="7"
+        width="16"
+        height="2"
+        rx="1"
+        transform="rotate(0)"
+    />
+    <rect
+        y="7"
+        width="9"
+        height="2"
+        rx="1"
+        transform="translate(0, 5) rotate(0)"
+    />
+</svg>
