@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FinanceAI
 
-## Getting Started
+Uma plataforma inovadora de gestão financeira que utiliza inteligência artificial para monitorar movimentações, fornecer insights personalizados e ajudar você a controlar seu orçamento de forma eficiente e intuitiva.
 
-First, run the development server:
+## 🚀 Tecnologias
+
+- **Next.js 14** - Framework React com App Router
+- **TypeScript** - Superset JavaScript com tipagem estática
+- **Tailwind CSS** - Framework CSS utilitário
+- **Prisma** - ORM para banco de dados
+- **PostgreSQL** - Banco de dados relacional
+- **Clerk** - Autenticação e autorização
+- **Zod** - Validação de schemas
+- **ShadCN (Radix UI/Recharts)** - Componentes primitivos acessíveis/Biblioteca de gráficos
+
+## 💻 Instalação
 
 ```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/financeai.git
+
+# Instale as dependências
+npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env.local
+
+# Execute as migrações do banco de dados
+npx prisma migrate dev
+
+# Inicie o servidor de desenvolvimento
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🗺️ Roadmap
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### MVP 1.0 - Base (Concluído) ✅
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [x] **Autenticação e Autorização**
+  - Integração com o Clerk
+  - Verificação de autorização em ações sensíveis
+- [x] **Gerenciamento de Transações**
+  - Endpoint para criar/atualizar transações com validação Zod
+  - Modelo de dados completo no Prisma
+- [x] **Visualização Básica**
+  - Gráfico de pizza para transações
+  - Tooltips informativos
 
-## Learn More
+### MVP 1.1 - Aprimoramentos (Em Desenvolvimento) 🚧
 
-To learn more about Next.js, take a look at the following resources:
+- [ ] **Dashboard Essencial**
+  - Resumo mensal de transações
+  - Filtros básicos de busca
+- [ ] **Exportação Básica**
+  - Exportação para CSV
+  - Relatórios simples por categoria
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### MVP 1.2 - Melhorias (Planejado) 📋
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] **UX e Performance**
+  - Otimização de consultas ao banco
+  - Design responsivo
 
-## Deploy on Vercel
+### Versão 2.0 (Futuro) 🔮
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] **Recursos Avançados**
+  - Integração com APIs bancárias
+  - Sistema de notificações
+  - Verificação em duas etapas
+  - Temas personalizados
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📚 Features Atuais
+
+1. **Autenticação e Autorização**
+
+   - Sistema seguro via Clerk
+   - Proteção de rotas e ações sensíveis
+
+2. **Gerenciamento de Transações**
+
+   - CRUD completo de transações
+   - Categorização automática
+   - Múltiplos métodos de pagamento
+   - Validações robustas com Zod
+
+3. **Visualização de Dados**
+
+   - Gráficos interativos com Recharts
+   - Dashboard intuitivo
+   - Tooltips informativos
+
+4. **Banco de Dados**
+
+   - Modelagem eficiente com Prisma
+   - PostgreSQL como banco principal
+
+5. **Webhooks**
+   - Integração com Stripe
+   - Processamento de eventos em tempo real
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 👨‍💻 Autores
+
+- [Gabriel dos Prazeres](https://github.com/gabrieldosprazeres)
+
+---
+
+Feito com 💙 pela equipe FinanceAI
