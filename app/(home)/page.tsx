@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "./_components/time-select";
-import { isMatch } from "date-fns";
+import { isMatch, parse } from "date-fns";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
@@ -26,6 +26,8 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
 
   if (monthIsInvalid)
     redirect(`/?month=${String(new Date().getMonth() + 1).padStart(2, "0")}`);
+
+  const selectedMonth = parse(month, "MM", new Date());
 
   const dashboard = await getDashboard(month);
 
@@ -67,11 +69,13 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
             <LastTransactions
               lastTransactions={dashboard.lastTransactions}
               className="inline min-sm:hidden"
+              selectedMonth={selectedMonth}
             />
           </div>
           <LastTransactions
             lastTransactions={dashboard.lastTransactions}
             className="inline max-sm:hidden"
+            selectedMonth={selectedMonth}
           />
         </div>
       </div>
