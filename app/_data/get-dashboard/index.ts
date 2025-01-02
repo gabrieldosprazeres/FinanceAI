@@ -46,7 +46,11 @@ export const getDashboard = async (month: string) => {
   });
 
   const expensesTotal = allExpenses.reduce((total, expense) => {
-    if (expense.paymentMethod === "CREDIT_CARD" && expense.installments > 1) {
+    if (
+      expense.installments &&
+      expense.paymentMethod === "CREDIT_CARD" &&
+      expense.installments > 1
+    ) {
       const purchaseDate = new Date(expense.date);
       for (let i = 0; i < expense.installments; i++) {
         const installmentDate = addMonths(purchaseDate, i);
@@ -89,7 +93,11 @@ export const getDashboard = async (month: string) => {
   const totalExpensePerCategory: TotalExpensePerCategory[] = [];
 
   allExpenses.forEach((expense) => {
-    if (expense.paymentMethod === "CREDIT_CARD" && expense.installments > 1) {
+    if (
+      expense.installments &&
+      expense.paymentMethod === "CREDIT_CARD" &&
+      expense.installments > 1
+    ) {
       const purchaseDate = new Date(expense.date);
       for (let i = 0; i < expense.installments; i++) {
         const installmentDate = addMonths(purchaseDate, i);
