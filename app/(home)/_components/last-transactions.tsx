@@ -82,7 +82,12 @@ const LastTransactions = ({
             </div>
             <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
               {getAmountPrefix(transaction)}
-              {formatCurrency(Number(transaction.amount))}
+              {transaction.paymentMethod === "CREDIT_CARD"
+                ? formatCurrency(
+                    Number(transaction.amount) /
+                      Number(transaction.installments),
+                  )
+                : formatCurrency(Number(transaction.amount))}
             </p>
           </div>
         ))}

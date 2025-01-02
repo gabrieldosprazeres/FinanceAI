@@ -40,6 +40,12 @@ import {
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { upsertTransaction } from "../_actions/upsert-transaction";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -59,6 +65,7 @@ const formSchema = z.object({
     .positive({
       message: "O valor deve ser positivo.",
     }),
+  installments: z.number().min(1).optional(),
   type: z.nativeEnum(TransactionType, {
     required_error: "O tipo é obrigatório.",
   }),
@@ -86,6 +93,7 @@ const UpsertTransactionDialog = ({
     defaultValues: defaultValues ?? {
       name: "",
       amount: 50,
+      installments: 1,
       type: TransactionType.EXPENSE,
       category: TransactionCategory.OTHER,
       paymentMethod: TransactionPaymentMethod.CASH,
@@ -93,9 +101,17 @@ const UpsertTransactionDialog = ({
     },
   });
 
+  const watchPaymentMethod = form.watch("paymentMethod");
+  const showInstallments =
+    watchPaymentMethod === TransactionPaymentMethod.CREDIT_CARD;
+
   const onSubmit = async (data: formSchema) => {
     try {
-      await upsertTransaction({ ...data, id: transactionId });
+      await upsertTransaction({
+        ...data,
+        id: transactionId,
+        installments: data.installments ?? 1,
+      });
       setIsOpen(false);
       form.reset();
     } catch (error) {
@@ -244,6 +260,48 @@ const UpsertTransactionDialog = ({
                 </FormItem>
               )}
             />
+
+            <div className="flex flex-col items-end">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <FormField
+                      disabled={!showInstallments}
+                      control={form.control}
+                      name="installments"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-col items-end">
+                          <FormLabel>Número de Parcelas</FormLabel>
+                          <FormControl>
+                            <Input
+                              className="max-w-[75px]"
+                              type="number"
+                              min={1}
+                              placeholder="Digite o número de parcelas..."
+                              {...field}
+                              onChange={(e) =>
+                                field.onChange(Number(e.target.value))
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {!showInstallments ? (
+                      <p>
+                        Esse campo só é habilitado quando o método de pagamento
+                        é cartão de crédito.
+                      </p>
+                    ) : (
+                      <p>Digite o número de parcelas.</p>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
 
             <FormField
               control={form.control}

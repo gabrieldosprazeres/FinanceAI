@@ -14,6 +14,7 @@ interface UpsertTransactionParams {
   id?: string;
   name: string;
   amount: number;
+  installments: number;
   type: TransactionType;
   category: TransactionCategory;
   paymentMethod: TransactionPaymentMethod;

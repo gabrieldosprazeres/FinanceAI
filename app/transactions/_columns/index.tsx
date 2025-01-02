@@ -69,6 +69,22 @@ export const transcationColumns: ColumnDef<Transaction>[] = [
     ),
   },
   {
+    accessorKey: "installments",
+    header: "Parcelas",
+    cell: ({ row: { original: transaction } }) => (
+      <div className="whitespace-nowrap">
+        {transaction.paymentMethod === "CREDIT_CARD"
+          ? `${transaction.installments} x de ${new Intl.NumberFormat("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            }).format(
+              Number(transaction.amount) / Number(transaction.installments),
+            )}`
+          : "-"}
+      </div>
+    ),
+  },
+  {
     accessorKey: "actions",
     header: "Ações",
     cell: ({ row: { original: transaction } }) => {
