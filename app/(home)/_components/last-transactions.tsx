@@ -10,11 +10,13 @@ import Link from "next/link";
 interface LastTransactionsProps {
   lastTransactions: Transaction[];
   className?: string;
+  selectedMonth: Date;
 }
 
 const LastTransactions = ({
   lastTransactions,
   className,
+  selectedMonth,
 }: LastTransactionsProps) => {
   const getAmountColor = (transaction: Transaction) => {
     if (transaction.type === "DEPOSIT") {
@@ -40,6 +42,20 @@ const LastTransactions = ({
     if (transaction.type === "INVESTMENT") {
       return "-";
     }
+  };
+
+  const getInstallmentInfo = (transaction: Transaction) => {
+    if (transaction.paymentMethod === "CREDIT_CARD") {
+      const purchaseDate = new Date(transaction.date);
+      const monthsDifference =
+        selectedMonth.getMonth() -
+        purchaseDate.getMonth() +
+        12 * (selectedMonth.getFullYear() - purchaseDate.getFullYear());
+      const currentInstallment = monthsDifference + 1;
+
+      return ` (${currentInstallment}/${transaction.installments})`;
+    }
+    return "";
   };
 
   return (
@@ -82,7 +98,12 @@ const LastTransactions = ({
             </div>
             <p className={`text-sm font-bold ${getAmountColor(transaction)}`}>
               {getAmountPrefix(transaction)}
-              {formatCurrency(Number(transaction.amount))}
+              {transaction.paymentMethod === "CREDIT_CARD"
+                ? `${formatCurrency(
+                    Number(transaction.amount) /
+                      Number(transaction.installments),
+                  )}${getInstallmentInfo(transaction)}`
+                : formatCurrency(Number(transaction.amount))}
             </p>
           </div>
         ))}

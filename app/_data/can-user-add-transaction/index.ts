@@ -1,22 +1,22 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
-import { getCurrentMonthTransactions } from "../get-current-month-transactions";
+import { auth } from "@clerk/nextjs/server";
+// import { getCurrentMonthTransactions } from "../get-current-month-transactions";
 
 export const canUserAddTransaction = async () => {
   const { userId } = await auth();
 
   if (!userId) throw new Error("Unauthorized");
 
-  const user = await clerkClient().users.getUser(userId);
+  // const user = await clerkClient().users.getUser(userId);
 
-  if (user.publicMetadata.subscriptionPlan === "premium") {
-    return true;
-  }
+  // if (user.publicMetadata.subscriptionPlan === "premium") {
+  //   return true;
+  // }
 
-  const currentMonthTransactions = await getCurrentMonthTransactions();
+  // const currentMonthTransactions = await getCurrentMonthTransactions();
 
-  if (currentMonthTransactions >= 10) {
-    return false;
-  }
+  // if (currentMonthTransactions >= 10) {
+  //   return false;
+  // }
 
   return true;
 };

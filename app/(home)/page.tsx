@@ -1,9 +1,9 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import Navbar from "../_components/navbar";
 import SummaryCards from "./_components/summary-cards";
 import TimeSelect from "./_components/time-select";
-import { isMatch } from "date-fns";
+import { isMatch, parse } from "date-fns";
 import TransactionsPieChart from "./_components/transactions-pie-chart";
 import { getDashboard } from "../_data/get-dashboard";
 import ExpensesPerCategory from "./_components/expenses-per-category";
@@ -24,13 +24,16 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
 
   const monthIsInvalid = !month || !isMatch(month, "MM");
 
-  if (monthIsInvalid) redirect(`/?month=${new Date().getMonth() + 1}`);
+  if (monthIsInvalid)
+    redirect(`/?month=${String(new Date().getMonth() + 1).padStart(2, "0")}`);
+
+  const selectedMonth = parse(month, "MM", new Date());
 
   const dashboard = await getDashboard(month);
 
   const userCanAddTransaction = await canUserAddTransaction();
 
-  const user = await clerkClient().users.getUser(userId);
+  // const user = await clerkClient().users.getUser(userId);
 
   return (
     <>
@@ -41,9 +44,9 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
           <div className="flex flex-row items-end justify-between space-y-2 sm:flex-row sm:items-center sm:gap-3 sm:space-y-0">
             <AiReportButton
               month={month}
-              hasPremiumPlan={
-                user?.publicMetadata.subscriptionPlan === "premium"
-              }
+              // hasPremiumPlan={
+              //   user?.publicMetadata.subscriptionPlan === "premium"
+              // }
             />
             <TimeSelect />
           </div>
@@ -66,11 +69,13 @@ const Home = async ({ searchParams: { month } }: HomeProps) => {
             <LastTransactions
               lastTransactions={dashboard.lastTransactions}
               className="inline min-sm:hidden"
+              selectedMonth={selectedMonth}
             />
           </div>
           <LastTransactions
             lastTransactions={dashboard.lastTransactions}
             className="inline max-sm:hidden"
+            selectedMonth={selectedMonth}
           />
         </div>
       </div>

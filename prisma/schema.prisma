@@ -18,6 +18,7 @@ model Transaction {
   name          String
   type          TransactionType
   amount        Decimal                  @db.Decimal(10, 2)
+  installments  Int?                     @default(1)
   category      TransactionCategory
   paymentMethod TransactionPaymentMethod
   date          DateTime

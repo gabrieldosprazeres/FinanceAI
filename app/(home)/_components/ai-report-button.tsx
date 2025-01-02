@@ -16,14 +16,13 @@ import { generateAiReport } from "../_actions/generate-ai-report";
 import { useState } from "react";
 import { ScrollArea } from "@/app/_components/ui/scroll-area";
 import Markdown from "react-markdown";
-import Link from "next/link";
 
 interface AiReportButtonProps {
-  hasPremiumPlan: boolean;
+  // hasPremiumPlan: boolean;
   month: string;
 }
 
-const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
+const AiReportButton = ({ month }: AiReportButtonProps) => {
   const [report, setReport] = useState<string | null>(null);
   const [reportIsLoading, setReportIsLoading] = useState(false);
 
@@ -52,7 +51,40 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
       </DialogTrigger>
 
       <DialogContent className="max-sm:max-w-[375px]">
-        {hasPremiumPlan ? (
+        <>
+          <DialogHeader>
+            <DialogTitle>Relatório IA</DialogTitle>
+            <DialogDescription>
+              Use inteligência artificial para gerar um relatório detalhado com
+              insights sobre suas finanças.
+            </DialogDescription>
+          </DialogHeader>
+
+          <ScrollArea className="prose max-h-[450px] text-white prose-h3:text-white prose-h4:text-white prose-strong:text-white">
+            <Markdown>{report}</Markdown>
+          </ScrollArea>
+
+          <DialogFooter className="flex flex-row justify-center space-x-4">
+            <DialogClose asChild>
+              <Button variant="outline" className="flex-1 hover:bg-primary">
+                Cancelar
+              </Button>
+            </DialogClose>
+
+            <Button
+              onClick={handleGenerateReportClick}
+              disabled={reportIsLoading}
+              className="flex-1"
+            >
+              {reportIsLoading ? (
+                <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                "Gerar relatório"
+              )}
+            </Button>
+          </DialogFooter>
+        </>
+        {/* {hasPremiumPlan ? (
           <>
             <DialogHeader>
               <DialogTitle>Relatório IA</DialogTitle>
@@ -105,7 +137,7 @@ const AiReportButton = ({ hasPremiumPlan, month }: AiReportButtonProps) => {
               </Button>
             </DialogFooter>
           </>
-        )}
+        )} */}
       </DialogContent>
     </Dialog>
   );
