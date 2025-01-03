@@ -46,6 +46,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
+import { InfoIcon } from "lucide-react";
 
 interface UpsertTransactionDialogProps {
   isOpen: boolean;
@@ -262,45 +263,46 @@ const UpsertTransactionDialog = ({
             />
 
             <div className="flex flex-col items-end">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <FormField
-                      disabled={!showInstallments}
-                      control={form.control}
-                      name="installments"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-col items-end">
-                          <FormLabel>Número de Parcelas</FormLabel>
-                          <FormControl>
-                            <Input
-                              className="max-w-[75px]"
-                              type="number"
-                              min={1}
-                              placeholder="Digite o número de parcelas..."
-                              {...field}
-                              onChange={(e) =>
-                                field.onChange(Number(e.target.value))
-                              }
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {!showInstallments ? (
-                      <p>
-                        Esse campo só é habilitado quando o método de pagamento
-                        é cartão de crédito.
-                      </p>
-                    ) : (
-                      <p>Digite o número de parcelas.</p>
-                    )}
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <FormField
+                disabled={!showInstallments}
+                control={form.control}
+                name="installments"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col items-end">
+                    <div className="flex items-center gap-2">
+                      <FormLabel>Número de Parcelas</FormLabel>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <InfoIcon className="h-4 w-4 text-muted-foreground" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {!showInstallments ? (
+                              <p>
+                                Esse campo só é habilitado quando o método de
+                                pagamento é cartão de crédito.
+                              </p>
+                            ) : (
+                              <p>Digite o número de parcelas.</p>
+                            )}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                    <FormControl>
+                      <Input
+                        className="max-w-[75px]"
+                        type="number"
+                        min={1}
+                        placeholder="Digite o número de parcelas..."
+                        {...field}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <FormField
