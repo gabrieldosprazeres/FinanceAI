@@ -6,7 +6,7 @@ import OpenAI from "openai";
 import { GenerateAiReportSchema, generateAiReportSchema } from "./schema";
 
 const DUMMY_REPORT =
-  '### Relatório de Finanças Pessoais\n\n#### Resumo Geral das Finanças\nAs transações listadas foram analisadas e as seguintes informações foram extraídas para oferecer insights sobre suas finanças:\n\n- **Total de despesas:** R$ 19.497,56\n- **Total de investimentos:** R$ 14.141,47\n- **Total de depósitos/correntes:** R$ 10.100,00 (considerando depósitos de salário e outros)\n- **Categoria de maior despesa:** Alimentação\n\n#### Análise por Categoria\n\n1. **Alimentação:** R$ 853,76\n2. **Transporte:** R$ 144,05\n3. **Entretenimento:** R$ 143,94\n4. **Outras despesas:** R$ 17.828,28 (inclui categorias como saúde, educação, habitação)\n\n#### Tendências e Insights\n- **Despesas Elevadas em Alimentação:** A categoria de alimentação representa uma parte significativa de suas despesas, com um total de R$ 853,76 nos últimos meses. É importante monitorar essa categoria para buscar economia.\n  \n- **Despesas Variáveis:** Outros tipos de despesas, como entretenimento e transporte, também se acumulam ao longo do mês. Identificar dias em que se gasta mais pode ajudar a diminuir esses custos.\n  \n- **Investimentos:** Você fez investimentos significativos na ordem de R$ 14.141,47. Isso é um bom sinal para a construção de patrimônio e aumento de sua segurança financeira no futuro.\n  \n- **Categorização das Despesas:** Há uma série de despesas listadas como "OUTRA", que podem ser reavaliadas. Classificar essas despesas pode ajudar a ter um controle melhor das finanças.\n\n#### Dicas para Melhorar Sua Vida Financeira\n\n1. **Crie um Orçamento Mensal:** Defina um limite de gastos para cada categoria. Isso ajuda a evitar gastos excessivos em áreas como alimentação e entretenimento.\n\n2. **Reduza Gastos com Alimentação:** Considere cozinhar em casa com mais frequência, planejar refeições e usar listas de compras para evitar compras impulsivas.\n\n3. **Revise Despesas Recorrentes:** Dê uma olhada nas suas despesas fixas (como saúde e educação) para verificar se estão adequadas às suas necessidades e se há espaço para redução.\n\n4. **Estabeleça Metas de Poupança:** Com base em seus depósitos e investimentos, estabeleça metas específicas para economizar uma porcentagem do seu rendimento mensal. Estimar quanto você pode economizar pode ajudar a garantir uma reserva de emergência.\n\n5. **Diminua os Gastos com Entretenimento:** Planeje lazer de forma que não exceda seu orçamento, busque opções gratuitas ou de baixo custo. Lembre-se de que entretenimento também pode ser feito em casa.\n\n6. **Reavalie Seus Investimentos:** Certifique-se de que seus investimentos estejam alinhados com seus objetivos financeiros a curto e longo prazo. Pesquise alternativas que podem oferecer melhor retorno.\n\n7. **Acompanhe Suas Finanças Regularmente:** Use aplicativos de gerenciamento financeiro para controlar suas despesas e receitas, ajudando você a manter-se informado sobre sua saúde financeira.\n\n#### Conclusão\nMelhorar sua vida financeira é um processo contínuo que envolve planejamento, monitoramento e ajustes regulares. Com as análises e as sugestões acima, você pode começar a tomar decisões financeiras mais estratégicas para alcançar seus objetivos. Lembre-se que cada real economizado é um passo a mais em direção à segurança financeira!';
+  "Relatório genérico para fallback. Verifique a chave de API.";
 
 export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
   generateAiReportSchema.parse({ month });
@@ -31,22 +31,117 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
     apiKey: process.env.OPENAI_API_KEY,
   });
 
+  const startDate = new Date(new Date().getFullYear(), Number(month) - 1, 1);
+  const endDate = new Date(new Date().getFullYear(), Number(month), 0);
+
   const transactions = await db.transaction.findMany({
     where: {
-      date: {
-        gte: new Date(new Date().getFullYear(), Number(month) - 1, 1),
-        lt: new Date(new Date().getFullYear(), Number(month), 0),
-      },
+      OR: [
+        {
+          date: {
+            gte: startDate,
+            lt: endDate,
+          },
+        },
+        {
+          AND: [
+            {
+              date: {
+                lt: startDate,
+              },
+            },
+            {
+              installments: {
+                gte: 1,
+              },
+            },
+          ],
+        },
+      ],
     },
   });
 
-  const content = `Gere um relatório com insights sobre as minhas finanças, com dicas e orientações de como melhorar minha vida financeira. As transações estão divididas por ponto e vírgula. A estrutura de cada uma é {DATA}-{TIPO}-{VALOR}-{CATEGORIA}. São elas:
-  ${transactions
-    .map(
-      (transaction) =>
-        `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${transaction.category}`,
-    )
-    .join(";")}`;
+  const filteredTransactions = transactions.flatMap((transaction) => {
+    const installmentValue = transaction.installments
+      ? Number(transaction.amount) / transaction.installments
+      : transaction.amount;
+
+    if (transaction.date >= startDate && transaction.date < endDate) {
+      if (
+        transaction.installments &&
+        transaction.paymentMethod === "CREDIT_CARD" &&
+        transaction.installments > 1
+      ) {
+        return Array.from({ length: transaction.installments }, (_, i) => ({
+          ...transaction,
+          amount: installmentValue,
+          date: new Date(
+            transaction.date.getFullYear(),
+            transaction.date.getMonth() + i,
+            1,
+          ),
+        })).filter((t) => t.date >= startDate && t.date < endDate);
+      }
+      return [transaction];
+    }
+
+    const installmentMonth = Math.ceil(
+      (startDate.getTime() - transaction.date.getTime()) /
+        (1000 * 60 * 60 * 24 * 30),
+    );
+
+    if (
+      transaction.installments !== null &&
+      installmentMonth <= transaction.installments
+    ) {
+      return [
+        {
+          ...transaction,
+          amount: installmentValue,
+        },
+      ];
+    }
+
+    return [];
+  });
+
+  const totalExpenses = filteredTransactions
+    .filter((t) => t.type === "EXPENSE")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const totalIncome = filteredTransactions
+    .filter((t) => t.type === "DEPOSIT")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const totalInvestments = filteredTransactions
+    .filter((t) => t.type === "INVESTMENT")
+    .reduce((sum, t) => sum + Number(t.amount), 0);
+
+  const balance = totalIncome - totalExpenses - totalInvestments;
+
+  const content = `
+    Gere um relatório detalhado com insights sobre minhas finanças e ofereça dicas práticas de como melhorar minha vida financeira.
+    Certifique-se de utilizar o formato a seguir para os insights e organize o texto para que o leitor possa navegar com facilidade.
+
+    Aqui estão as informações gerais:
+    - Total de Receitas: R$ ${totalIncome.toFixed(2)}
+    - Total de Despesas: R$ ${totalExpenses.toFixed(2)}
+    - Total de Investimentos: R$ ${totalInvestments.toFixed(2)}
+    - Saldo: R$ ${balance.toFixed(2)}
+    
+    
+    As transações estão divididas por linha no formato {DATA}-{TIPO}-{CATEGORIA}-{VALOR}. São elas:
+    ${filteredTransactions
+      .map(
+        (transaction) =>
+          `${transaction.date.toLocaleDateString("pt-BR")}-${transaction.type}-${transaction.category}-R$ ${transaction.amount.toFixed(2)}`,
+      )
+      .join("\n")}
+
+    Além disso, não quero que você traga dados assim: "| Categoria | Montante (R$) | |-------------------|---------------| | TRANSPORTATION | R$ 47.00 | | EDUCATION | R$ 1186.58 |" para o usuário, é feio e ilegível e que a cor do texto seja sempre branco.
+
+    Por favor, me ajude a entender melhor minha situação financeira e a melhorar meus hábitos de consumo.
+  `;
 
   const completion = await openAi.chat.completions.create({
     model: "gpt-4o-mini",
@@ -54,7 +149,7 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
       {
         role: "system",
         content:
-          "Você é um especialista em gestão e organização de finanças pessoais. Você ajuda as pessoas a organizarem melhor as suas finanças.",
+          "Você é um especialista em gestão financeira e organização de finanças pessoais. Sua função é ajudar as pessoas a entenderem e organizarem melhor suas finanças.",
       },
       {
         role: "user",
