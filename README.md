@@ -48,11 +48,15 @@ npm run dev
 
 ### MVP 1.1 - Aprimoramentos (Em Desenvolvimento) 🚧
 
+- [ ] **Sistema de Notificações**
+  - Criar notificações gerais e individuais para os usuários
+  - Automatizar notificações do sistema
 - [ ] **Dashboard Essencial**
   - Resumo mensal de transações
   - Filtros básicos de busca
 - [ ] **Exportação Básica**
   - Exportação para CSV
+  - Exportação para PDF
   - Relatórios simples por categoria
 
 ### MVP 1.2 - Melhorias (Planejado) 📋
@@ -65,7 +69,6 @@ npm run dev
 
 - [ ] **Recursos Avançados**
   - Integração com APIs bancárias
-  - Sistema de notificações
   - Verificação em duas etapas
   - Temas personalizados
 
