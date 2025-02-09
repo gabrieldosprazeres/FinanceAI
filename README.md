@@ -100,9 +100,13 @@ npm run dev
 
 ## 📝 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este projeto está licenciado sob a **GNU Affero General Public License v3.0 (AGPLv3)**.  
+Isso significa que qualquer pessoa pode usar, modificar e distribuir este código, desde que todas as versões derivadas também sejam disponibilizadas publicamente sob a mesma licença.  
 
-## 👨‍💻 Autores
+Para mais detalhes, veja o arquivo [LICENSE](./LICENSE).
+
+
+## 👨‍💻 Autor
 
 - [Gabriel dos Prazeres](https://github.com/gabrieldosprazeres)
 
